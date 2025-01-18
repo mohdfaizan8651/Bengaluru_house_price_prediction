@@ -36,4 +36,4 @@ def predict_home_price_():
 if __name__=="__main__":
     print("Starting server")
     utils.load_sevaed_artifacts()
-    app.run(debug=True)
+    app.run(host="0.0.0.0",debug=True)
