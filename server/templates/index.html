@@ -14,7 +14,7 @@
             console.log("Document loaded");
 
             // API URL
-            var url = "http://127.0.0.1:5000/get_location_names";
+            var url = "https://bengaluru-house-price-prediction-3ms6.onrender.com/get_location_names";
 
             // Make a GET request
             $.get(url, function (data, status) {
@@ -40,7 +40,7 @@
         function get_price() {
             event.preventDefault()
             console.log(event)
-            const url = "http://127.0.0.1:5000/predict_home_price"
+            const url = "https://bengaluru-house-price-prediction-3ms6.onrender.com/predict_home_price"
             const location = document.getElementById("uilocations").value;
             const total_sqft = document.getElementById("total_sqft").value;
             const bhk = document.getElementById("bhk").value;
