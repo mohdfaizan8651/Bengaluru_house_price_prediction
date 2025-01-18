@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bengaluru House Price Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+
+    <script>
+        function onPageload() {
+            console.log("Document loaded");
+
+            // API URL
+            var url = "http://127.0.0.1:5000/get_location_names";
+
+            // Make a GET request
+            $.get(url, function (data, status) {
+                console.log("Got response for get_location_names request");
+
+                if (data) {
+                    // Get the locations from response
+                    var locations = data.location; // Ensure your API response uses `locations`
+                    console.log(locations, "locations name ")
+                    // Get the dropdown element
+                    var uilocations = document.getElementById("uilocations");
+                    $(uilocations).empty(); // Clear existing options
+
+                    // Append new options
+                    for (var i in locations) {
+                        var opt = new Option(locations[i], locations[i]); // Value and text
+                        $(uilocations).append(opt);
+                    }
+                }
+            });
+        }
+
+        function get_price() {
+            event.preventDefault()
+            console.log(event)
+            const url = "http://127.0.0.1:5000/predict_home_price"
+            const location = document.getElementById("uilocations").value;
+            const total_sqft = document.getElementById("total_sqft").value;
+            const bhk = document.getElementById("bhk").value;
+            const bath = document.getElementById("bath").value;
+            console.log(url, location, total_sqft, bhk, bath)
+            $.post(url, {
+                "location": location,
+                "total_sqft": total_sqft,
+                "bhk": bhk,
+                "bath": bath
+            }, function (data, status) {
+                console.log(data, status, "get_price")
+                document.getElementById("Predicted_price").innerHTML = `Bangluour Price Prediction ₹${data.estimated_price}Lakh`
+            })
+        }
+
+        // Attach onPageload to the window.onload
+        window.onload = onPageload;
+    </script>
+
+
+    <style>
+        body {
+            background-image: url('static/pexels-binyaminmellish-186077.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 2px solid #4CAF50;
+        }
+
+        header h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        header p {
+            font-size: 1rem;
+            margin: 0.5rem 0 0;
+        }
+
+        .form-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            margin: 3rem auto;
+            max-width: 500px;
+        }
+
+        .form-container label {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .form-container select,
+        .form-container input,
+        .form-container button {
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            background-color: #4CAF50;
+            border: none;
+            padding: 0.75rem;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 5px;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            margin-top: 2rem;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h2>Bengaluru House Price Predictor</h2>
+        <p>Accurate predictions for your dream home in Bengaluru!</p>
+    </header>
+
+    <div class="container">
+        <div class="form-container">
+            <h3 class="text-center mb-4">Predict Your Home Price</h3>
+            <form>
+                <div class="mb-3">
+                    <label for="uilocations" class="form-label">Location</label>
+                    <select class="form-select" aria-label="Default select example" name="location" id="uilocations">
+                        <option selected disabled="disabled">Open this select menu</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Total Squre fit</label>
+                        <input type="text" class="form-control" id="total_sqft" name="total_sqft"
+                            aria-describedby="emailHelp" placeholder="Enter total square feet">
+
+                    </div>
+
+                </div>
+                <div class="mb-3">
+
+                    <label for="exampleInputEmail1" class="form-label">BHK</label>
+                    <input type="text" class="form-control" id="bhk" name="bhk" aria-describedby="emailHelp"
+                        placeholder="Enter BHK count">
+
+
+
+
+
+
+
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Bath</label>
+                    <input type="text" class="form-control" id="bath" name="bath" aria-describedby="emailHelp"
+                        placeholder="Enter bathroom count">
+
+                </div>
+
+
+
+                <button class="btn btn-primary w-100" onclick="get_price()">Predict Price</button>
+            </form>
+            <div class="result mt-3" id="Predicted_price">
+                Enter the details above to see the prediction!
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Powered by MOHD FAIZAN ALI | © 2025 Bengaluru Price Predictor</p>
+    </footer>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    window.onload = onPageload;
+</script>
+
+</html>
